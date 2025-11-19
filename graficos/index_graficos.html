@@ -1,87 +1,392 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Análise de Benchmarks - SIR/SIS</title>
+    <title>Análise Completa - Benchmarks SIR/SIS</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
         h1 {
             color: #333;
             text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .info-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .info-box h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .info-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        .info-item strong {
+            display: block;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .info-item span {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        .graph-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .graph-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .graph-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+        .graph-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        .graph-card h3 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            padding-left: 15px;
+        }
+        .graph-card p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 5px 0;
+            padding-left: 15px;
+        }
+        .graph-card a {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .graph-icon {
+            font-size: 2em;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .features {
+            background-color: #f9f9f9;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 20px 0;
         }
-        .graph-list {
+        .features h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .features ul {
             list-style: none;
             padding: 0;
         }
-        .graph-list li {
-            margin: 10px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #4CAF50;
-            border-radius: 5px;
+        .features li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
         }
-        .graph-list a {
-            color: #2196F3;
-            text-decoration: none;
-            font-size: 16px;
+        .features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #667eea;
             font-weight: bold;
+            font-size: 1.2em;
         }
-        .graph-list a:hover {
-            text-decoration: underline;
+        .tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
         }
-        .info {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 40px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📊 Análise de Benchmarks - Modelos SIR/SIS</h1>
+        <h1>📊 Análise Completa de Benchmarks</h1>
+        <div class="subtitle">Modelos Epidemiológicos SIR e SIS - Paralelo e Distribuído</div>
         
-        <div class="info">
-            <p><strong>Total de testes:</strong> 300 execuções</p>
-            <p><strong>Repetições por configuração:</strong> 5</p>
-            <p><strong>Threads utilizadas (paralelo):</strong> 8</p>
+        <div class="info-box">
+            <h3>⚙️ Configuração dos Testes</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Repetições</strong>
+                    <span>5 por config</span>
+                </div>
+                <div class="info-item">
+                    <strong>Threads (Paralelo)</strong>
+                    <span>8 threads</span>
+                </div>
+                <div class="info-item">
+                    <strong>População SIR</strong>
+                    <span>1.000.000</span>
+                </div>
+                <div class="info-item">
+                    <strong>População SIS</strong>
+                    <span>1.000.000</span>
+                </div>
+                <div class="info-item">
+                    <strong>Hosts Distribuídos</strong>
+                    <span>1, 2, 4, 8</span>
+                </div>
+                <div class="info-item">
+                    <strong>Total de Testes</strong>
+                    <span>480 execuções</span>
+                </div>
+            </div>
         </div>
-        
-        <h2>Gráficos Interativos</h2>
-        <p>Clique em um gráfico para abri-lo. Use o mouse para:</p>
-        <ul>
-            <li>🖱️ <strong>Passar sobre pontos</strong>: ver valores exatos</li>
-            <li>🔍 <strong>Scroll</strong>: dar zoom</li>
-            <li>✋ <strong>Arrastar</strong>: mover o gráfico</li>
-            <li>🏠 <strong>Botão Home</strong>: resetar visualização</li>
-            <li>📷 <strong>Botão Camera</strong>: salvar como PNG</li>
-        </ul>
-        
-        <ul class="graph-list">
-            <li>📈 <a href="../graficos/grafico_sir_tempo_populacao.html" target="_blank">SIR: Tempo × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sir_tempo_passos.html" target="_blank">SIR: Tempo × Número de Passos</a></li>
-            <li>⚡ <a href="../graficos/grafico_sir_speedup_populacao.html" target="_blank">SIR: Speedup × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sir_tempo_cenarios.html" target="_blank">SIR Cenários: Tempo × Número de Cenários</a></li>
-            <li>⚡ <a href="../graficos/grafico_sir_speedup_eficiencia_cenarios.html" target="_blank">SIR Cenários: Speedup e Eficiência</a></li>
-            <li>📈 <a href="../graficos/grafico_sis_tempo_populacao.html" target="_blank">SIS: Tempo × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sis_tempo_passos.html" target="_blank">SIS: Tempo × Número de Passos</a></li>
-            <li>⚡ <a href="../graficos/grafico_sis_speedup_populacao.html" target="_blank">SIS: Speedup × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sis_tempo_cenarios.html" target="_blank">SIS Cenários: Tempo × Número de Cenários</a></li>
-            <li>⚡ <a href="../graficos/grafico_sis_speedup_eficiencia_cenarios.html" target="_blank">SIS Cenários: Speedup e Eficiência</a></li>
-        </ul>
+
+        <div class="features">
+            <h3>🎮 Como Usar os Gráficos Interativos</h3>
+            <ul>
+                <li><strong>Passar o mouse</strong> sobre pontos para ver valores exatos</li>
+                <li><strong>Scroll</strong> para dar zoom nos gráficos</li>
+                <li><strong>Arrastar</strong> para mover a área de visualização</li>
+                <li><strong>Botão Home</strong> (🏠) para resetar a visualização</li>
+                <li><strong>Botão Camera</strong> (📷) para salvar como PNG</li>
+                <li><strong>Clicar na legenda</strong> para mostrar/ocultar séries</li>
+            </ul>
+        </div>
+
+        <!-- SEÇÃO: BENCHMARKS PARALELOS -->
+        <div class="section">
+            <h2>🚀 Benchmarks Paralelos (Variação de Problema)</h2>
+            
+            <h3 style="color: #764ba2; margin-top: 30px;">📈 Modelo SIR</h3>
+            <div class="graph-grid">
+                <div class="graph-card">
+                    <a href="grafico_sir_tempo_populacao.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Tempo × População</h3>
+                        <p>Análise do impacto do tamanho da população no tempo de execução</p>
+                        <p><span class="tag">50.000 passos</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sir_tempo_passos.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Tempo × Passos</h3>
+                        <p>Impacto do número de iterações no desempenho</p>
+                        <p><span class="tag">100.000 população</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sir_speedup_populacao.html" target="_blank">
+                        <h3><span class="graph-icon">⚡</span>Speedup × População</h3>
+                        <p>Ganho de desempenho paralelo vs sequencial</p>
+                        <p><span class="tag">Comparativo</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sir_tempo_cenarios.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Tempo × Cenários</h3>
+                        <p>Performance com múltiplos cenários simultâneos</p>
+                        <p><span class="tag">1M população</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sir_speedup_eficiencia_cenarios.html" target="_blank">
+                        <h3><span class="graph-icon">⚡</span>Speedup e Eficiência</h3>
+                        <p>Análise de performance paralela em cenários</p>
+                        <p><span class="tag">Dual chart</span></p>
+                    </a>
+                </div>
+            </div>
+
+            <h3 style="color: #764ba2; margin-top: 30px;">📉 Modelo SIS</h3>
+            <div class="graph-grid">
+                <div class="graph-card">
+                    <a href="grafico_sis_tempo_populacao.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Tempo × População</h3>
+                        <p>Análise do impacto do tamanho da população no tempo de execução</p>
+                        <p><span class="tag">1.001 passos</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sis_tempo_passos.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Tempo × Passos</h3>
+                        <p>Impacto do número de iterações no desempenho</p>
+                        <p><span class="tag">10.000 população</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sis_speedup_populacao.html" target="_blank">
+                        <h3><span class="graph-icon">⚡</span>Speedup × População</h3>
+                        <p>Ganho de desempenho paralelo vs sequencial</p>
+                        <p><span class="tag">Comparativo</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sis_tempo_cenarios.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Tempo × Cenários</h3>
+                        <p>Performance com múltiplos cenários simultâneos</p>
+                        <p><span class="tag">1.000 população</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_sis_speedup_eficiencia_cenarios.html" target="_blank">
+                        <h3><span class="graph-icon">⚡</span>Speedup e Eficiência</h3>
+                        <p>Análise de performance paralela em cenários</p>
+                        <p><span class="tag">Dual chart</span></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- SEÇÃO: BENCHMARKS DISTRIBUÍDOS -->
+        <div class="section">
+            <h2>🌐 Benchmarks Distribuídos (RMI)</h2>
+            
+            <div class="graph-grid">
+                <div class="graph-card">
+                    <a href="grafico_distribuido_sir_tempo_hosts.html" target="_blank">
+                        <h3><span class="graph-icon">🖥️</span>SIR: Tempo × Hosts</h3>
+                        <p>Desempenho distribuído com variação de hosts</p>
+                        <p><span class="tag">1M população</span><span class="tag">RMI</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_distribuido_sis_tempo_hosts.html" target="_blank">
+                        <h3><span class="graph-icon">🖥️</span>SIS: Tempo × Hosts</h3>
+                        <p>Desempenho distribuído com variação de hosts</p>
+                        <p><span class="tag">1M população</span><span class="tag">RMI</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_distribuido_comparacao_speedup.html" target="_blank">
+                        <h3><span class="graph-icon">⚡</span>Comparação de Speedup</h3>
+                        <p>SIR vs SIS - Ganho com distribuição</p>
+                        <p><span class="tag">Comparativo</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_distribuido_comparacao_eficiencia.html" target="_blank">
+                        <h3><span class="graph-icon">📊</span>Comparação de Eficiência</h3>
+                        <p>Utilização dos hosts distribuídos</p>
+                        <p><span class="tag">Dual chart</span></p>
+                    </a>
+                </div>
+                
+                <div class="graph-card">
+                    <a href="grafico_distribuido_throughput_comparativo.html" target="_blank">
+                        <h3><span class="graph-icon">📈</span>Throughput Comparativo</h3>
+                        <p>Cenários processados por segundo</p>
+                        <p><span class="tag">SIR vs SIS</span></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="info-box" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+            <h3>📝 Interpretação dos Resultados</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>Speedup</strong>
+                    <span>T_seq / T_par</span>
+                </div>
+                <div class="info-item">
+                    <strong>Eficiência</strong>
+                    <span>(Speedup / N) × 100%</span>
+                </div>
+                <div class="info-item">
+                    <strong>Throughput</strong>
+                    <span>Cenários / segundo</span>
+                </div>
+                <div class="info-item">
+                    <strong>Overhead</strong>
+                    <span>Comunicação + Sync</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: #666; font-size: 0.9em;">
+            <p>Gerado automaticamente pelo script de análise | Modelos SIR/SIS</p>
+            <p>📂 Arquivos CSV disponíveis em: <code>dados/</code></p>
+        </div>
     </div>
 </body>
 </html>

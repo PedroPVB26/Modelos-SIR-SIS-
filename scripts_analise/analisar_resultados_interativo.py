@@ -513,150 +513,36 @@ fig10.update_layout(
 # =============================================================================
 html_files = []
 
-fig1.write_html('../graficos/../graficos/grafico_sir_tempo_populacao.html')
-html_files.append('../graficos/../graficos/grafico_sir_tempo_populacao.html')
-print("✓ Gráfico 1 salvo: ../graficos/../graficos/grafico_sir_tempo_populacao.html")
+fig1.write_html('../graficos/grafico_sir_tempo_populacao.html')
+print("✓ Gráfico 1 salvo: grafico_sir_tempo_populacao.html")
 
 fig2.write_html('../graficos/grafico_sir_tempo_passos.html')
-html_files.append('../graficos/grafico_sir_tempo_passos.html')
-print("✓ Gráfico 2 salvo: ../graficos/grafico_sir_tempo_passos.html")
+print("✓ Gráfico 2 salvo: grafico_sir_tempo_passos.html")
 
 fig3.write_html('../graficos/grafico_sir_speedup_populacao.html')
-html_files.append('../graficos/grafico_sir_speedup_populacao.html')
-print("✓ Gráfico 3 salvo: ../graficos/grafico_sir_speedup_populacao.html")
+print("✓ Gráfico 3 salvo: grafico_sir_speedup_populacao.html")
 
 fig4.write_html('../graficos/grafico_sir_tempo_cenarios.html')
-html_files.append('../graficos/grafico_sir_tempo_cenarios.html')
-print("✓ Gráfico 4 salvo: ../graficos/grafico_sir_tempo_cenarios.html")
+print("✓ Gráfico 4 salvo: grafico_sir_tempo_cenarios.html")
 
 fig5.write_html('../graficos/grafico_sir_speedup_eficiencia_cenarios.html')
-html_files.append('../graficos/grafico_sir_speedup_eficiencia_cenarios.html')
-print("✓ Gráfico 5 salvo: ../graficos/grafico_sir_speedup_eficiencia_cenarios.html")
+print("✓ Gráfico 5 salvo: grafico_sir_speedup_eficiencia_cenarios.html")
 
 fig6.write_html('../graficos/grafico_sis_tempo_populacao.html')
-html_files.append('../graficos/grafico_sis_tempo_populacao.html')
-print("✓ Gráfico 6 salvo: ../graficos/grafico_sis_tempo_populacao.html")
+print("✓ Gráfico 6 salvo: grafico_sis_tempo_populacao.html")
 
 fig7.write_html('../graficos/grafico_sis_tempo_passos.html')
-html_files.append('../graficos/grafico_sis_tempo_passos.html')
-print("✓ Gráfico 7 salvo: ../graficos/grafico_sis_tempo_passos.html")
+print("✓ Gráfico 7 salvo: grafico_sis_tempo_passos.html")
 
 fig8.write_html('../graficos/grafico_sis_speedup_populacao.html')
-html_files.append('../graficos/grafico_sis_speedup_populacao.html')
-print("✓ Gráfico 8 salvo: ../graficos/grafico_sis_speedup_populacao.html")
+print("✓ Gráfico 8 salvo: grafico_sis_speedup_populacao.html")
 
 fig9.write_html('../graficos/grafico_sis_tempo_cenarios.html')
-html_files.append('../graficos/grafico_sis_tempo_cenarios.html')
-print("✓ Gráfico 9 salvo: ../graficos/grafico_sis_tempo_cenarios.html")
+print("✓ Gráfico 9 salvo: grafico_sis_tempo_cenarios.html")
 
 fig10.write_html('../graficos/grafico_sis_speedup_eficiencia_cenarios.html')
-html_files.append('../graficos/grafico_sis_speedup_eficiencia_cenarios.html')
-print("✓ Gráfico 10 salvo: ../graficos/grafico_sis_speedup_eficiencia_cenarios.html")
-
-# =============================================================================
-# Criar página índice com todos os gráficos
-# =============================================================================
-index_html = """
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Análise de Benchmarks - SIR/SIS</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f5f5f5;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .graph-list {
-            list-style: none;
-            padding: 0;
-        }
-        .graph-list li {
-            margin: 10px 0;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #4CAF50;
-            border-radius: 5px;
-        }
-        .graph-list a {
-            color: #2196F3;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        .graph-list a:hover {
-            text-decoration: underline;
-        }
-        .info {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>📊 Análise de Benchmarks - Modelos SIR/SIS</h1>
-        
-        <div class="info">
-            <p><strong>Total de testes:</strong> 300 execuções</p>
-            <p><strong>Repetições por configuração:</strong> 5</p>
-            <p><strong>Threads utilizadas (paralelo):</strong> 8</p>
-        </div>
-        
-        <h2>Gráficos Interativos</h2>
-        <p>Clique em um gráfico para abri-lo. Use o mouse para:</p>
-        <ul>
-            <li>🖱️ <strong>Passar sobre pontos</strong>: ver valores exatos</li>
-            <li>🔍 <strong>Scroll</strong>: dar zoom</li>
-            <li>✋ <strong>Arrastar</strong>: mover o gráfico</li>
-            <li>🏠 <strong>Botão Home</strong>: resetar visualização</li>
-            <li>📷 <strong>Botão Camera</strong>: salvar como PNG</li>
-        </ul>
-        
-        <ul class="graph-list">
-            <li>📈 <a href="../graficos/grafico_sir_tempo_populacao.html" target="_blank">SIR: Tempo × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sir_tempo_passos.html" target="_blank">SIR: Tempo × Número de Passos</a></li>
-            <li>⚡ <a href="../graficos/grafico_sir_speedup_populacao.html" target="_blank">SIR: Speedup × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sir_tempo_cenarios.html" target="_blank">SIR Cenários: Tempo × Número de Cenários</a></li>
-            <li>⚡ <a href="../graficos/grafico_sir_speedup_eficiencia_cenarios.html" target="_blank">SIR Cenários: Speedup e Eficiência</a></li>
-            <li>📈 <a href="../graficos/grafico_sis_tempo_populacao.html" target="_blank">SIS: Tempo × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sis_tempo_passos.html" target="_blank">SIS: Tempo × Número de Passos</a></li>
-            <li>⚡ <a href="../graficos/grafico_sis_speedup_populacao.html" target="_blank">SIS: Speedup × População</a></li>
-            <li>📈 <a href="../graficos/grafico_sis_tempo_cenarios.html" target="_blank">SIS Cenários: Tempo × Número de Cenários</a></li>
-            <li>⚡ <a href="../graficos/grafico_sis_speedup_eficiencia_cenarios.html" target="_blank">SIS Cenários: Speedup e Eficiência</a></li>
-        </ul>
-    </div>
-</body>
-</html>
-"""
-
-with open('../graficos/../graficos/index_graficos.html', 'w', encoding='utf-8') as f:
-    f.write(index_html)
-
-print("\n✓ Página índice criada: ../graficos/../graficos/index_graficos.html")
+print("✓ Gráfico 10 salvo: grafico_sis_speedup_eficiencia_cenarios.html")
 
 print("\n" + "="*80)
-print("✓ Todos os gráficos interativos foram gerados com sucesso!")
+print("✓ Gráficos de benchmarks normais gerados com sucesso!")
 print("="*80)
-print("\n📂 Abrindo página índice no navegador...")
-
-# Abrir a página índice no navegador padrão
-index_path = os.path.abspath('../graficos/../graficos/index_graficos.html')
-webbrowser.open('file://' + index_path)
-
-print(f"\n💡 Você pode também abrir manualmente: {index_path}")

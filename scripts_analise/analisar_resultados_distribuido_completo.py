@@ -254,91 +254,21 @@ fig5.update_layout(
 # =============================================================================
 # Salvar gráficos
 # =============================================================================
-fig1.write_html('grafico_distribuido_sir_tempo_hosts.html')
+fig1.write_html('../graficos/grafico_distribuido_sir_tempo_hosts.html')
 print("\n✓ Gráfico 1 salvo: grafico_distribuido_sir_tempo_hosts.html")
 
-fig2.write_html('grafico_distribuido_sis_tempo_hosts.html')
+fig2.write_html('../graficos/grafico_distribuido_sis_tempo_hosts.html')
 print("✓ Gráfico 2 salvo: grafico_distribuido_sis_tempo_hosts.html")
 
-fig3.write_html('grafico_distribuido_comparacao_speedup.html')
+fig3.write_html('../graficos/grafico_distribuido_comparacao_speedup.html')
 print("✓ Gráfico 3 salvo: grafico_distribuido_comparacao_speedup.html")
 
-fig4.write_html('grafico_distribuido_comparacao_eficiencia.html')
+fig4.write_html('../graficos/grafico_distribuido_comparacao_eficiencia.html')
 print("✓ Gráfico 4 salvo: grafico_distribuido_comparacao_eficiencia.html")
 
-fig5.write_html('grafico_distribuido_throughput_comparativo.html')
+fig5.write_html('../graficos/grafico_distribuido_throughput_comparativo.html')
 print("✓ Gráfico 5 salvo: grafico_distribuido_throughput_comparativo.html")
 
-# =============================================================================
-# Página índice
-# =============================================================================
-index_html = """
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Benchmarks Distribuídos - SIR e SIS</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }
-        h1 { color: #333; text-align: center; }
-        .container { max-width: 1200px; margin: 0 auto; background-color: white; 
-                    padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .graph-list { list-style: none; padding: 0; }
-        .graph-list li { margin: 10px 0; padding: 15px; background-color: #f9f9f9; 
-                        border-left: 4px solid #2196F3; border-radius: 5px; }
-        .graph-list a { color: #2196F3; text-decoration: none; font-size: 16px; font-weight: bold; }
-        .graph-list a:hover { text-decoration: underline; }
-        .info { background-color: #e3f2fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #2196F3; color: white; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🌐 Análise Completa - Benchmarks Distribuídos SIR e SIS</h1>
-        
-        <div class="info">
-            <h3>Configuração dos Testes</h3>
-            <table>
-                <tr><th>Parâmetro</th><th>SIR</th><th>SIS</th></tr>
-                <tr><td>População</td><td>1.000.000</td><td>1.000</td></tr>
-                <tr><td>Passos</td><td>50.000</td><td>50.000</td></tr>
-                <tr><td>Número de hosts</td><td colspan="2">1, 2, 4, 8</td></tr>
-                <tr><td>Cenários testados</td><td colspan="2">100, 500, 1000</td></tr>
-                <tr><td>Repetições</td><td colspan="2">5 por configuração</td></tr>
-            </table>
-        </div>
-        
-        <h2>📊 Gráficos Interativos</h2>
-        <ul class="graph-list">
-            <li>⏱️ <a href="grafico_distribuido_sir_tempo_hosts.html" target="_blank">SIR: Tempo × Número de Hosts</a></li>
-            <li>⏱️ <a href="grafico_distribuido_sis_tempo_hosts.html" target="_blank">SIS: Tempo × Número de Hosts</a></li>
-            <li>⚡ <a href="grafico_distribuido_comparacao_speedup.html" target="_blank">Comparação de Speedup: SIR vs SIS</a></li>
-            <li>📊 <a href="grafico_distribuido_comparacao_eficiencia.html" target="_blank">Comparação de Eficiência: SIR vs SIS</a></li>
-            <li>📈 <a href="grafico_distribuido_throughput_comparativo.html" target="_blank">Throughput Comparativo</a></li>
-        </ul>
-        
-        <h2>📝 Interpretação dos Resultados</h2>
-        <ul>
-            <li><strong>Speedup:</strong> Quantas vezes mais rápido fica ao usar múltiplos hosts</li>
-            <li><strong>Eficiência:</strong> Quão bem os hosts estão sendo utilizados (ideal = 100%)</li>
-            <li><strong>Throughput:</strong> Quantos cenários são processados por segundo</li>
-            <li><strong>Overhead:</strong> Comunicação RMI e coordenação reduzem eficiência</li>
-        </ul>
-    </div>
-</body>
-</html>
-"""
-
-with open('../graficos/index_graficos_distribuido_completo.html', 'w', encoding='utf-8') as f:
-    f.write(index_html)
-
-print("\n✓ Página índice criada: ../graficos/index_graficos_distribuido_completo.html")
 print("\n" + "="*80)
-print("✓ Análise completa!")
+print("✓ Gráficos distribuídos gerados com sucesso!")
 print("="*80)
-
-index_path = os.path.abspath('../graficos/index_graficos_distribuido_completo.html')
-webbrowser.open('file://' + index_path)
-print(f"\n💡 Arquivo: {index_path}")

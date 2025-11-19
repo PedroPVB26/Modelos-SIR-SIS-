@@ -33,7 +33,7 @@ interface ModeloRemotoSIS extends Remote {
 public class BenchmarksDistribuidoCompleto {
     
     private static final int REPETICOES = 5;
-    private static final String ARQUIVO_CSV = "resultados_benchmark_distribuido_completo.csv";
+    private static final String ARQUIVO_CSV = "dados/resultados_benchmark_distribuido_completo.csv";
     
     // Configurações de teste
     private static final int[] NUMEROS_HOSTS = {1, 2, 4, 8};
@@ -49,7 +49,7 @@ public class BenchmarksDistribuidoCompleto {
     private static final double RECUPERADOS_INICIAIS_SIR = 0.0;
     
     // Parâmetros SIS
-    private static final double POPULACAO_SIS = 1000.0;
+    private static final double POPULACAO_SIS = 1000000.0;
     private static final int PASSOS_SIS = 50000;
     private static final double TAXA_TRANSMISSAO_SIS = 0.3;
     private static final double TAXA_RECUPERACAO_SIS = 0.1;

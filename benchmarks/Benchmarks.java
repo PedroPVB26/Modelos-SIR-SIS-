@@ -12,7 +12,7 @@ import java.util.Locale;
 public class Benchmarks {
     
     private static final int REPETICOES = 5; // Número de repetições por teste
-    private static final String ARQUIVO_CSV = "resultados_benchmark.csv";
+    private static final String ARQUIVO_CSV = "dados/resultados_benchmark.csv";
     
     // Configurações de tamanho de problema para testar
     private static final double[] TAMANHOS_POPULACAO = {100000.0, 500000.0, 1000000.0, 2000000.0};
