@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Análise de Benchmarks Distribuídos - SIR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .graph-list {
+            list-style: none;
+            padding: 0;
+        }
+        .graph-list li {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #2196F3;
+            border-radius: 5px;
+        }
+        .graph-list a {
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .graph-list a:hover {
+            text-decoration: underline;
+        }
+        .info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Análise de Benchmarks Distribuídos - Modelo SIR</h1>
+        
+        <div class="info">
+            <p><strong>Configuração dos Testes:</strong></p>
+            <ul>
+                <li><strong>População:</strong> 1.000.000</li>
+                <li><strong>Passos:</strong> 50.000</li>
+                <li><strong>Número de hosts testados:</strong> 1, 2, 4, 8</li>
+                <li><strong>Cenários testados:</strong> 100, 500, 1000</li>
+                <li><strong>Repetições:</strong> 5 por configuração</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <p><strong>⚠️ Nota sobre a simulação:</strong></p>
+            <p>Esta implementação simula múltiplos hosts usando diferentes portas RMI (1099, 1100, 1101, etc.) 
+            na mesma máquina. Para testes reais com máquinas físicas diferentes:</p>
+            <ul>
+                <li>Execute ServidorModeloSIR em cada máquina</li>
+                <li>Modifique o cliente para conectar aos IPs reais</li>
+                <li>Configure firewall para permitir comunicação RMI</li>
+            </ul>
+        </div>
+        
+        <h2>📊 Gráficos Interativos</h2>
+        
+        <ul class="graph-list">
+            <li>⏱️ <a href="grafico_distribuido_tempo_hosts.html" target="_blank">Tempo de Execução × Número de Hosts</a></li>
+            <li>⚡ <a href="grafico_distribuido_speedup_eficiencia.html" target="_blank">Speedup e Eficiência × Número de Hosts</a></li>
+            <li>📈 <a href="grafico_distribuido_throughput.html" target="_blank">Throughput × Número de Hosts</a></li>
+        </ul>
+        
+        <h2>📊 Resumo Estatístico</h2>
+        <p>Speedup esperado ao usar múltiplos hosts:</p>
+        <ul>
+            <li><strong>Linear (ideal):</strong> 2 hosts = 2x mais rápido, 4 hosts = 4x, etc.</li>
+            <li><strong>Real:</strong> Menor devido a overhead de rede e coordenação</li>
+            <li><strong>Eficiência:</strong> (Speedup real / Número de hosts) × 100%</li>
+        </ul>
+    </div>
+</body>
+</html>

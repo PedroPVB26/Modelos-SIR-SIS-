@@ -1,0 +1,47 @@
+# Arquivos compilados Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Arquivos temporários
+*.tmp
+*.log
+*.swp
+*.bak
+*~
+
+# Diretórios de build
+build/
+target/
+dist/
+out/
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+.eclipse/
+.settings/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+
+# Dados temporários (manter CSVs de resultado)
+*.txt
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Resultados antigos (opcional - descomente se quiser versionar apenas os finais)
+# dados/*.csv
+# graficos/*.html
