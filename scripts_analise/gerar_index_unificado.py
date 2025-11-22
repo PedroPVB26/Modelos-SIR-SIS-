@@ -190,7 +190,7 @@ index_html = """<!DOCTYPE html>
             <div class="info-grid">
                 <div class="info-item">
                     <strong>Repetições</strong>
-                    <span>5 por config</span>
+                    <span>15 por config</span>
                 </div>
                 <div class="info-item">
                     <strong>Threads (Paralelo)</strong>
@@ -210,7 +210,7 @@ index_html = """<!DOCTYPE html>
                 </div>
                 <div class="info-item">
                     <strong>Total de Testes</strong>
-                    <span>480 execuções</span>
+                    <span>1440 execuções</span>
                 </div>
             </div>
         </div>
@@ -280,7 +280,7 @@ index_html = """<!DOCTYPE html>
                     <a href="grafico_sis_tempo_populacao.html" target="_blank">
                         <h3><span class="graph-icon">📊</span>Tempo × População</h3>
                         <p>Análise do impacto do tamanho da população no tempo de execução</p>
-                        <p><span class="tag">1.001 passos</span></p>
+                        <p><span class="tag">50.000 passos</span></p>
                     </a>
                 </div>
                 
@@ -288,7 +288,7 @@ index_html = """<!DOCTYPE html>
                     <a href="grafico_sis_tempo_passos.html" target="_blank">
                         <h3><span class="graph-icon">📊</span>Tempo × Passos</h3>
                         <p>Impacto do número de iterações no desempenho</p>
-                        <p><span class="tag">10.000 população</span></p>
+                        <p><span class="tag">100.000 população</span></p>
                     </a>
                 </div>
                 
@@ -304,7 +304,7 @@ index_html = """<!DOCTYPE html>
                     <a href="grafico_sis_tempo_cenarios.html" target="_blank">
                         <h3><span class="graph-icon">📊</span>Tempo × Cenários</h3>
                         <p>Performance com múltiplos cenários simultâneos</p>
-                        <p><span class="tag">1.000 população</span></p>
+                        <p><span class="tag">1M população</span></p>
                     </a>
                 </div>
                 

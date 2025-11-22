@@ -8,9 +8,16 @@ import java.util.Arrays;
 
 public class ServidorModeloSIS extends UnicastRemoteObject implements ModeloSISRemoto {
 
+    private double ultimoTempoProcessamento = 0.0;
+
     // Construtor obrigatório para objetos remotos
     public ServidorModeloSIS() throws RemoteException {
         super();
+    }
+
+    @Override
+    public double getUltimoTempoProcessamento() throws RemoteException {
+        return ultimoTempoProcessamento;
     }
 
     // --- 1. A função de derivada do Modelo SIS ---
@@ -31,7 +38,8 @@ public class ServidorModeloSIS extends UnicastRemoteObject implements ModeloSISR
     @Override
     public double[][] rungeKutka4(double populacaoTotal, double taxaTransmissao, double taxaRecuperacao, double infectadosIniciais, double tempoMaximo, int numeroPassos)
             throws RemoteException {
-        System.out.println("\n[SERVIDOR] Iniciando simulação remota SIS...");
+
+        long tempoInicio = System.nanoTime();
 
         double suscetiveisIniciais = populacaoTotal - infectadosIniciais; // Não há recuperadosIniciais
         double[] estadoAtual = {suscetiveisIniciais, infectadosIniciais};
@@ -39,8 +47,6 @@ public class ServidorModeloSIS extends UnicastRemoteObject implements ModeloSISR
         double incrementoTempo = tempoMaximo / (numeroPassos - 1);
         double[][] historico = new double[numeroPassos][numeroCompartimentos];
         historico[0] = Arrays.copyOf(estadoAtual, numeroCompartimentos);
-
-        long tempoInicio = System.nanoTime();
 
         for (int passo = 0; passo < numeroPassos - 1; passo++) {
             double tempoAtual = passo * incrementoTempo;
@@ -98,8 +104,7 @@ public class ServidorModeloSIS extends UnicastRemoteObject implements ModeloSISR
         }
 
         long tempoFim = System.nanoTime();
-        double tempoDecorridoMs = (tempoFim - tempoInicio) / 1_000_000.0;
-        System.out.printf("[SERVIDOR] Simulação concluída em %.4f ms\n", tempoDecorridoMs);
+        ultimoTempoProcessamento = (tempoFim - tempoInicio) / 1_000_000.0;
 
         return historico;
     }
@@ -109,13 +114,13 @@ public class ServidorModeloSIS extends UnicastRemoteObject implements ModeloSISR
         try {
             ServidorModeloSIS obj = new ServidorModeloSIS();
 
-            LocateRegistry.createRegistry(1099);
+            LocateRegistry.createRegistry(1100);
 
             // Registra o objeto com um nome específico para o SIS
             String nome = "ServicoModeloSIS";
-            Naming.rebind(nome, obj);
+            Naming.rebind("//localhost:1100/" + nome, obj);
 
-            System.out.println("Servidor RMI do Modelo SIS pronto e registrado como: " + nome);
+            System.out.println("Servidor RMI do Modelo SIS pronto e registrado como: " + nome + " (porta 1100)");
 
         } catch (RemoteException | java.net.MalformedURLException e) {
             System.err.println("Erro no Servidor RMI (SIS): " + e.getMessage());

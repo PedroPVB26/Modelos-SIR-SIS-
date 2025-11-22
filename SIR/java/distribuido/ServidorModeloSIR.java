@@ -8,9 +8,16 @@ import java.util.Arrays;
 
 public class ServidorModeloSIR extends UnicastRemoteObject implements ModeloSIRRemoto {
 
+    private double ultimoTempoProcessamento = 0.0;
+
     // Construtor obrigatório para objetos remotos
     public ServidorModeloSIR() throws RemoteException {
         super();
+    }
+
+    @Override
+    public double getUltimoTempoProcessamento() throws RemoteException {
+        return ultimoTempoProcessamento;
     }
 
     // --- 1. A função de derivada do Modelo SIR ---
@@ -30,7 +37,8 @@ public class ServidorModeloSIR extends UnicastRemoteObject implements ModeloSIRR
     @Override
     public double[][] rungeKutka4(double populacaoTotal, double taxaTransmissao, double taxaRecuperacao, double infectadosIniciais, double recuperadosIniciais, double tempoMaximo, int numeroPassos)
             throws RemoteException {
-        System.out.println("\n[SERVIDOR] Iniciando simulação remota...");
+
+        long tempoInicio = System.nanoTime();
 
         double suscetiveisIniciais = populacaoTotal - infectadosIniciais - recuperadosIniciais;
         double[] estadoAtual = {suscetiveisIniciais, infectadosIniciais, recuperadosIniciais};
@@ -38,8 +46,6 @@ public class ServidorModeloSIR extends UnicastRemoteObject implements ModeloSIRR
         double incrementoTempo = tempoMaximo / (numeroPassos - 1);
         double[][] historico = new double[numeroPassos][numeroCompartimentos];
         historico[0] = Arrays.copyOf(estadoAtual, numeroCompartimentos);
-
-        long tempoInicio = System.nanoTime();
 
         for (int passo = 0; passo < numeroPassos - 1; passo++) {
             double tempoAtual = passo * incrementoTempo;
@@ -97,8 +103,7 @@ public class ServidorModeloSIR extends UnicastRemoteObject implements ModeloSIRR
         }
 
         long tempoFim = System.nanoTime();
-        double tempoDecorridoMs = (tempoFim - tempoInicio) / 1_000_000.0;
-        System.out.printf("[SERVIDOR] Simulação concluída em %.4f ms\n", tempoDecorridoMs);
+        ultimoTempoProcessamento = (tempoFim - tempoInicio) / 1_000_000.0;
 
         return historico; // O resultado é serializado e enviado de volta ao cliente
     }

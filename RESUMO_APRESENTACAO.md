@@ -1,4 +1,12 @@
 # Resumo Essencial para Apresentação
+## Framework Completo de Benchmarks - Modelos SIR/SIS
+
+**Autor:** Pedro Paulo Vezzali Batista  
+**Instituição:** Universidade Federal de Alfenas (UNIFAL-MG)  
+**Data:** Novembro 2025  
+**Repositório:** [github.com/PedroPVB26/Modelos-SIR-SIS-](https://github.com/PedroPVB26/Modelos-SIR-SIS-)
+
+---
 
 ## 1. Modelo Epidemiológico SIR
 
@@ -130,7 +138,63 @@ Thread 8:  875.001 - 1.000.000
 
 ---
 
-## 5. Solução Distribuída (RMI)
+## 5. Framework de Automação
+
+### Script Centralizado: executar.ps1
+
+**Automação completa do projeto:**
+```powershell
+./executar.ps1
+```
+
+**O que faz:**
+1. **Compilação [1/4]:** Compila todo o projeto (6 etapas)
+   - SIR/SIS sequenciais e paralelos
+   - Cenários (packages)
+   - Interfaces RMI (distribuído)
+   - Benchmarks
+   - Bytecode separado em `build/` (organização limpa)
+
+2. **Testes Básicos [2/4]:** Validação rápida
+   - SIR/SIS Sequencial
+   - SIR/SIS Paralelo
+   - Cenários (Monte Carlo)
+   - Distribuído RMI (se servidores rodando)
+
+3. **Benchmarks Completos [3/4]:** ~10-30 minutos
+   - Variação de população: 100k, 500k, 1M, 2M
+   - Variação de passos: 10k, 25k, 50k, 100k
+   - Variação de cenários: 10, 30, 50, 100, 300, 500
+   - Benchmarks distribuídos: 1, 2, 4, 8 hosts
+   - Total: ~1980 testes, 3 repetições cada
+   - Resultados salvos em `datos/*.csv`
+
+4. **Gráficos [4/4]:** Geração automática
+   - 15 gráficos interativos (Plotly HTML)
+   - Página índice unificada
+   - Abertura automática no navegador
+
+**Estrutura de Build:**
+```
+Projeto/
+├── SIR/java/          # Código-fonte
+├── SIS/java/          # Código-fonte
+├── benchmarks/        # Código-fonte
+├── build/             # Bytecode (.class) - em .gitignore
+├── datos/             # Resultados CSV
+├── graficos/          # Visualizações HTML
+└── executar.ps1       # Automação completa
+```
+
+**Benefícios:**
+- ✅ **Zero interação manual** após iniciar
+- ✅ **Build organizado** (código separado de bytecode)
+- ✅ **Reprodutibilidade** total
+- ✅ **Análise visual** imediata
+
+---
+
+## 6. Solução Distribuída (RMI)
 
 ### **Arquitetura:**
 ```
@@ -212,7 +276,7 @@ for (Future<Resultado> futuro : futuros) {
 
 ---
 
-## 6. Comparação: Paralelo vs Distribuído
+## 7. Comparação: Paralelo vs Distribuído
 
 | Aspecto | Paralelo (Threads) | Distribuído (RMI) |
 |---------|-------------------|-------------------|
@@ -227,7 +291,7 @@ for (Future<Resultado> futuro : futuros) {
 
 ---
 
-## 7. Resultados Principais
+## 8. Resultados Principais
 
 ### **Gráfico: Speedup vs Número de Threads/Hosts**
 
@@ -274,7 +338,7 @@ Speedup real (8 threads): ~7x
 
 ---
 
-## 8. Pontos-Chave para Apresentação
+## 9. Pontos-Chave para Apresentação
 
 ### **Parte Técnica:**
 
@@ -323,7 +387,7 @@ RMI (internet):                   ~50-500 ms
 
 ---
 
-## 9. Slide Sugerido: "Por que RK4 não foi paralelizado?"
+## 10. Slide Sugerido: "Por que RK4 não foi paralelizado?"
 
 ```
 ❌ Dependências Sequenciais:
@@ -346,7 +410,7 @@ RMI (internet):                   ~50-500 ms
 
 ---
 
-## 10. Perguntas Frequentes (Preparação)
+## 11. Perguntas Frequentes (Preparação)
 
 ### **Q1: Por que não usar GPU?**
 **R:** GPUs são ótimas para operações matriciais, mas RK4 tem dependências temporais sequenciais. Cada passo depende do anterior, limitando paralelismo. Nossa divisão por população/cenários é mais adequada para CPUs multi-core.
@@ -376,16 +440,18 @@ Isso demonstra a **escalabilidade forte** da solução paralela.
 
 ---
 
-## 11. Conclusão
+## 12. Conclusão
 
 ### **Principais Contribuições:**
 
-1. ✅ Implementação correta de **RK4 sequencial** para modelo SIR
+1. ✅ Implementação correta de **RK4 sequencial** para modelos SIR e SIS
 2. ✅ Análise teórica e prática de **por que RK4 não é paralelizável**
 3. ✅ Solução paralela eficiente com **divisão de população** (speedup 6-7x)
 4. ✅ Implementação distribuída com **RMI** simulando ambiente multi-máquina
-5. ✅ **Benchmarks completos** comparando todas as abordagens
-6. ✅ **15 gráficos interativos** analisando desempenho
+5. ✅ **Framework completo de automação** com executar.ps1
+6. ✅ **Benchmarks completos** (~1980 testes) comparando todas as abordagens
+7. ✅ **15 gráficos interativos** analisando desempenho
+8. ✅ **Build organizado** (código separado de bytecode)
 
 ### **Impacto Prático:**
 
@@ -393,6 +459,8 @@ Isso demonstra a **escalabilidade forte** da solução paralela.
 - Viabiliza simulações epidemiológicas em **tempo real**
 - Base para sistemas de **alerta precoce** de epidemias
 - Demonstra princípios de **computação paralela e distribuída** aplicados
+- **Framework reproduzível**: qualquer pessoa pode executar `./executar.ps1`
+- **Organização profissional**: build separado, versionamento limpo
 
 ### **Próximos Passos (Trabalhos Futuros):**
 
@@ -423,3 +491,26 @@ Isso demonstra a **escalabilidade forte** da solução paralela.
 
 **Data de apresentação:** Novembro 2025  
 **Repositório:** [github.com/PedroPVB26/Modelos-SIR-SIS-](https://github.com/PedroPVB26/Modelos-SIR-SIS-)
+
+---
+
+## Nota Final: Framework de Reprodu��o
+
+**Este projeto � totalmente automatizado e reproduz�vel:**
+
+\\\powershell
+./executar.ps1
+\\\`n
+**O script acima executa:**
+1. ? Compila��o completa (build/ separado)
+2. ? Testes de valida��o
+3. ? Benchmarks completos (~1980 testes)
+4. ? Benchmarks distribu�dos RMI
+5. ? Gera��o de 15 gr�ficos interativos
+6. ? Abertura autom�tica no navegador
+
+**Tempo total:** ~10-40 minutos (dependendo do hardware)
+**Sa�da:** CSVs, gr�ficos HTML, an�lise completa
+
+**Autor:** Pedro Paulo Vezzali Batista  
+**UNIFAL-MG | Novembro 2025**

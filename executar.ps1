@@ -1,117 +1,143 @@
-# Script de compilacao e execucao do projeto
-# Projeto: Benchmarks de Modelos Epidemiologicos SIR/SIS
-
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Compilando Projeto..." -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-
-$ErrorActionPreference = "Continue"
-
-# Compilar modelos base
-Write-Host "`n[1/6] Compilando modelos SIR..." -ForegroundColor Yellow
-javac -cp ".;SIR/java" SIR/java/SIRSequencial.java SIR/java/SIRParalelo.java
-
-Write-Host "[2/6] Compilando cenarios SIR..." -ForegroundColor Yellow
-javac -cp ".;SIR/java" SIR/java/cenarios/*.java
-
-Write-Host "[3/6] Compilando modelos SIS..." -ForegroundColor Yellow
-javac -cp ".;SIS/java" SIS/java/SISSequencial.java SIS/java/SISParalelo.java
-
-Write-Host "[4/6] Compilando cenarios SIS..." -ForegroundColor Yellow
-javac -cp ".;SIS/java" SIS/java/cenarios/*.java
-
-# Compilar interfaces RMI
-Write-Host "[5/6] Compilando interfaces RMI..." -ForegroundColor Yellow
-Push-Location SIR/java/distribuido
-javac ModeloSIRRemoto.java
-javac ServidorModeloSIR.java
-javac ClienteModeloSIR.java
-Pop-Location
-
-Push-Location SIS/java/distribuido
-javac ModeloSISRemoto.java
-javac ServidorModeloSIS.java
-javac ClienteModeloSIS.java
-Pop-Location
-
-javac -cp ".;SIR/java;SIS/java;SIR/java/distribuido;SIS/java/distribuido" Testes.java
-
-# Compilar Benchmarks
-Write-Host "[6/6] Compilando Benchmarks..." -ForegroundColor Yellow
-javac -cp ".;SIR/java;SIS/java" benchmarks/Benchmarks.java
-javac -cp ".;SIR/java;SIS/java" benchmarks/BenchmarksDistribuidoCompleto.java
-
-Write-Host "`n========================================" -ForegroundColor Green
-Write-Host "  Compilacao Concluida!" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
-
 # ============================================================================
-# EXECUCAO AUTOMATICA DE TODOS OS TESTES
+# SCRIPT UNIFICADO - BENCHMARK COMPLETO
+# Executa todos os testes: Sequencial, Paralelo, Cenarios e RMI
+# Gera graficos e analises automaticamente
 # ============================================================================
 
-Write-Host "`n" -NoNewline
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  EXECUTANDO TESTES AUTOMATICAMENTE" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
+$ErrorActionPreference = "Stop"
+$ProgressPreference = "SilentlyContinue"
 
-# 1. Testes Basicos
-Write-Host "`n[1/4] Executando testes basicos..." -ForegroundColor Yellow
-Write-Host "      (Validacao rapida de todas as implementacoes)" -ForegroundColor Gray
-java -cp ".;SIR/java;SIS/java;SIR/java/distribuido;SIS/java/distribuido" Testes
+$ROOT = Split-Path -Parent $MyInvocation.MyCommand.Path
 
-# 2. Benchmarks Completos
-Write-Host "`n[2/4] Executando benchmarks completos..." -ForegroundColor Yellow
-Write-Host "      (Isso pode demorar 10-30 minutos)" -ForegroundColor Gray
-Write-Host "      Progresso sera salvo em: dados/resultados_benchmark.csv" -ForegroundColor Gray
-java -cp ".;SIR/java;SIS/java;benchmarks" Benchmarks
-Write-Host "`n      Benchmarks concluidos! CSV salvo em dados/" -ForegroundColor Green
+Write-Host ""
+Write-Host "========================================"  -ForegroundColor Cyan
+Write-Host "  BENCHMARK COMPLETO - SIR/SIS"  -ForegroundColor Cyan
+Write-Host "========================================"  -ForegroundColor Cyan
+Write-Host ""
 
-# 3. Benchmarks Distribuidos
-Write-Host "`n[3/4] Executando benchmarks distribuidos..." -ForegroundColor Yellow
-Write-Host "      (Testando multiplos hosts RMI - pode demorar 15-40 minutos)" -ForegroundColor Gray
-Write-Host "      Progresso sera salvo em: dados/resultados_benchmark_distribuido_completo.csv" -ForegroundColor Gray
-java -cp ".;SIR/java;SIS/java;benchmarks" BenchmarksDistribuidoCompleto
-Write-Host "`n      Benchmarks distribuidos concluidos!" -ForegroundColor Green
+# ===========================================================================
+# PASSO 1: LIMPEZA
+# ===========================================================================
+Write-Host "[1/7] Limpeza do ambiente..." -ForegroundColor Yellow
 
-# 4. Geracao de Graficos
-Write-Host "`n[4/4] Gerando graficos interativos..." -ForegroundColor Yellow
-Write-Host "      (Analise visual dos resultados)" -ForegroundColor Gray
+Get-Process java -ErrorAction SilentlyContinue | Stop-Process -Force
+Get-Job | Remove-Job -Force
+Start-Sleep -Seconds 2
 
-Push-Location scripts_analise
-Write-Host "      - Graficos principais..." -ForegroundColor Gray
-python analisar_resultados_interativo.py
+Remove-Item "$ROOT\dados\resultados_benchmark_completo.csv" -ErrorAction SilentlyContinue
+Remove-Item "$ROOT\graficos\*" -Include *.png, *.html -ErrorAction SilentlyContinue
 
-Write-Host "      - Graficos distribuidos..." -ForegroundColor Gray
-python analisar_resultados_distribuido_completo.py
+Write-Host "      Concluido" -ForegroundColor Green
 
-Write-Host "      - Gerando pagina indice unificada..." -ForegroundColor Gray
+# ===========================================================================
+# PASSO 2: COMPILACAO
+# ===========================================================================
+Write-Host "[2/7] Compilacao das classes..." -ForegroundColor Yellow
+
+# Criar pasta para arquivos compilados
+$BUILD_DIR = "$ROOT\build"
+if (-not (Test-Path $BUILD_DIR)) {
+    New-Item -ItemType Directory -Path $BUILD_DIR | Out-Null
+}
+
+Write-Host "      - SIR..." -ForegroundColor Gray
+cd "$ROOT\SIR\java"
+javac -d "$BUILD_DIR" SIRSequencial.java SIRParalelo.java 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "      ERRO ao compilar SIR" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "      - SIS..." -ForegroundColor Gray
+cd "$ROOT\SIS\java"
+javac -d "$BUILD_DIR" SISSequencial.java SISParalelo.java 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "      ERRO ao compilar SIS" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "      - Cenarios..." -ForegroundColor Gray
+cd "$ROOT\SIR\java"
+javac -d "$BUILD_DIR" cenarios/*.java 2>&1 | Out-Null
+cd "$ROOT\SIS\java"
+javac -d "$BUILD_DIR" cenarios/*.java 2>&1 | Out-Null
+
+Write-Host "      - Benchmark..." -ForegroundColor Gray
+cd "$ROOT\benchmarks"
+
+# Compilar com classpath incluindo a pasta build
+javac -encoding UTF-8 -cp "$BUILD_DIR;..\SIR\java;..\SIS\java" -d "$BUILD_DIR" Benchmarks.java 2>&1 | Out-Null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "      ERRO ao compilar Benchmarks" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "      Concluido" -ForegroundColor Green
+
+# ===========================================================================
+# PASSO 3: EXECUTAR BENCHMARKS
+# ===========================================================================
+Write-Host "[3/5] Executando benchmarks..." -ForegroundColor Yellow
+
+cd "$ROOT\benchmarks"
+java -cp "$BUILD_DIR;..\SIR\java;..\SIS\java" Benchmarks
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "      ERRO durante execucao dos benchmarks" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "      Concluido" -ForegroundColor Green
+
+# ===========================================================================
+# PASSO 4: GERAR GRAFICOS
+# ===========================================================================
+Write-Host "[4/5] Gerando graficos interativos..." -ForegroundColor Yellow
+
+cd "$ROOT\scripts_analise"
+
+if (Test-Path "$ROOT\dados\resultados_benchmark_completo.csv") {
+    python analisar_resultados_interativo.py
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "      Concluido" -ForegroundColor Green
+    } else {
+        Write-Host "      ERRO ao gerar graficos" -ForegroundColor Red
+    }
+} elseif (Test-Path "$ROOT\dados\resultados_benchmark.csv") {
+    python analisar_resultados_interativo.py
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "      Concluido" -ForegroundColor Green
+    } else {
+        Write-Host "      ERRO ao gerar graficos" -ForegroundColor Red
+    }
+} else {
+    Write-Host "      ERRO: Arquivo CSV nao foi gerado!" -ForegroundColor Red
+}
+
+# ===========================================================================
+# PASSO 5: GERAR INDEX
+# ===========================================================================
+Write-Host "[5/5] Gerando pagina de visualizacao..." -ForegroundColor Yellow
+
+cd "$ROOT\scripts_analise"
 python gerar_index_unificado.py
-Pop-Location
 
-Write-Host "`n      Graficos gerados em: graficos/" -ForegroundColor Green
-Write-Host "      Pagina principal: graficos/index_graficos.html" -ForegroundColor Cyan
+if (Test-Path "$ROOT\graficos\index_graficos.html") {
+    Write-Host "      Concluido" -ForegroundColor Green
+} else {
+    Write-Host "      ERRO ao gerar pagina" -ForegroundColor Red
+}
 
-# ============================================================================
+# ===========================================================================
 # RESUMO FINAL
-# ============================================================================
-
-Write-Host "`n" -NoNewline
-Write-Host "========================================" -ForegroundColor Green
-Write-Host "  EXECUCAO COMPLETA FINALIZADA!" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
-
-Write-Host "`nArquivos gerados:" -ForegroundColor Cyan
-Write-Host "  Resultados CSV:" -ForegroundColor White
-Write-Host "    - dados/resultados_benchmark.csv" -ForegroundColor Gray
-Write-Host "    - dados/resultados_benchmark_distribuido_completo.csv" -ForegroundColor Gray
-Write-Host "`n  Graficos HTML:" -ForegroundColor White
-Write-Host "    - graficos/index_graficos.html (TODOS OS GRAFICOS)" -ForegroundColor Cyan
-Write-Host "    - 15 graficos interativos individuais" -ForegroundColor Gray
-
-Write-Host "`nProximos passos:" -ForegroundColor Yellow
-Write-Host "  1. Abra graficos/index_graficos.html no navegador" -ForegroundColor White
-Write-Host "  2. Navegue entre graficos paralelos e distribuidos" -ForegroundColor White
-Write-Host "  3. Analise os resultados interativos (zoom, hover, etc.)" -ForegroundColor White
-
-Write-Host "`nPressione qualquer tecla para continuar..."
-$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+# ===========================================================================
+Write-Host ""
+Write-Host "========================================"  -ForegroundColor Green
+Write-Host "  PROCESSO CONCLUIDO!"  -ForegroundColor Green
+Write-Host "========================================"  -ForegroundColor Green
+Write-Host ""
+Write-Host "Arquivos gerados:" -ForegroundColor White
+Write-Host "  Dados: dados\resultados_benchmark_completo.csv" -ForegroundColor Gray
+Write-Host "  Graficos: graficos\*.html" -ForegroundColor Gray
+Write-Host "  Visualizacao: graficos\index_graficos.html" -ForegroundColor Gray
+Write-Host ""

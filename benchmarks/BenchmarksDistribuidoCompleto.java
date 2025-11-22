@@ -32,15 +32,15 @@ interface ModeloRemotoSIS extends Remote {
  */
 public class BenchmarksDistribuidoCompleto {
     
-    private static final int REPETICOES = 5;
-    private static final String ARQUIVO_CSV = "dados/resultados_benchmark_distribuido_completo.csv";
+    private static final int REPETICOES = 15;
+    private static final String ARQUIVO_CSV = "../datos/resultados_benchmark_distribuido_completo.csv";
     
     // Configurações de teste
     private static final int[] NUMEROS_HOSTS = {1, 2, 4, 8};
     private static final int[] NUMEROS_CENARIOS = {100, 500, 1000};
     private static final int PORTA_BASE = 1099;
     
-    // Parâmetros SIR
+    // Parâmetros SIR (idênticos ao Benchmarks.java)
     private static final double POPULACAO_SIR = 1000000.0;
     private static final int PASSOS_SIR = 50000;
     private static final double TAXA_TRANSMISSAO_SIR = 0.2;
@@ -48,12 +48,12 @@ public class BenchmarksDistribuidoCompleto {
     private static final double INFECTADOS_INICIAIS_SIR = 10.0;
     private static final double RECUPERADOS_INICIAIS_SIR = 0.0;
     
-    // Parâmetros SIS
+    // Parâmetros SIS (idênticos ao Benchmarks.java)
     private static final double POPULACAO_SIS = 1000000.0;
     private static final int PASSOS_SIS = 50000;
-    private static final double TAXA_TRANSMISSAO_SIS = 0.3;
+    private static final double TAXA_TRANSMISSAO_SIS = 0.2;
     private static final double TAXA_RECUPERACAO_SIS = 0.1;
-    private static final double INFECTADOS_INICIAIS_SIS = 1.0;
+    private static final double INFECTADOS_INICIAIS_SIS = 10.0;
     
     private static PrintWriter csvWriter;
     private static List<Registry> registries = new ArrayList<>();

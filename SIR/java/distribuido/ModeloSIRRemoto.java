@@ -23,6 +23,12 @@ public interface ModeloSIRRemoto extends Remote {
             throws RemoteException;
 
     /**
+     * Retorna o tempo de processamento da última execução (em ms).
+     * Usado para medir overhead de rede/serialização.
+     */
+    double getUltimoTempoProcessamento() throws RemoteException;
+
+    /**
      * Função de derivada auxiliar do Modelo SIR. Embora seja um método
      * auxiliar, deve ser acessível se o método principal o chama.
      */
