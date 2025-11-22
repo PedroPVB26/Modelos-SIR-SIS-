@@ -1,14 +1,20 @@
 # Modelagem Epidemiológica Paralela e Distribuída
 ## Modelos SIR e SIS - Framework Completo de Benchmarks
 
-**Autor:** Pedro Paulo Vezzali Batista  
-**Instituição:** Universidade Federal de Alfenas (UNIFAL-MG)  
+**Membros**  
+- Leonardo Silva e Cruz
+- Lucas Francisco Alves Costa
+- Isabella Pires da Silva
+- Pedro Paulo Valente Bittencourt
+
+
+**Instituição:** Universidade Tecnológica Federal Do Paraná (UTFPR)
 **Data:** Novembro de 2025  
 **Repositório:** [github.com/PedroPVB26/Modelos-SIR-SIS-](https://github.com/PedroPVB26/Modelos-SIR-SIS-)
 
 ---
 
-## 1. Problema Escolhido
+## 1. Problema
 
 ### Contexto
 Simulações epidemiológicas podem ser computacionalmente intensivas com:
@@ -52,7 +58,7 @@ dI/dt = β·S·I/N - γ·I
 - Exemplo: 100k indivíduos ÷ 8 threads = 12.5k por thread
 - **Resultado:** Overhead domina o trabalho útil
 
-**3. PARALELO - Cenários Independentes (SUCESSO ✅)**
+**3. PARALELO - Cenários Independentes (SUCESSO)**
 - Estratégia: Simular múltiplos cenários simultaneamente
 - Uso: Análise de sensibilidade, variação de parâmetros
 - **Resultado:** Speedup de 3.4x até 7.6x
@@ -60,7 +66,7 @@ dI/dt = β·S·I/N - γ·I
 **4. DISTRIBUÍDO (RMI)**
 - Cliente-servidor com múltiplos hosts simulados (portas 1099-1106)
 - Testes extensivos com 100, 500 e 1000 cenários
-- Speedup de 3-5x com 8 hosts
+- **Resultado**: Speedup de 3-5x com 8 hosts
 
 ---
 
@@ -71,7 +77,7 @@ dI/dt = β·S·I/N - γ·I
 **Script Principal:** `executar.ps1` (PowerShell)
 - ✅ Compilação automática de todo o projeto (6 etapas)
 - ✅ Execução de testes básicos (validação rápida)
-- ✅ Benchmarks completos (~1.620 testes, ~10-30 min)
+- ✅ Benchmarks completos (~1.620 testes)
 - ✅ Benchmarks distribuídos RMI (múltiplos hosts, ~540 testes)
 - ✅ Geração automática de 15 gráficos interativos
 - ✅ Abertura automática no navegador
@@ -108,14 +114,14 @@ dI/dt = β·S·I/N - γ·I
 
 ---
 
-## 4. Resultados de Desempenho (DADOS REAIS)
+## 4. Resultados de Desempenho
 
 ### 🟡 Paralelização de População - Análise Detalhada
 
-#### SIR - População 100k, Passos 50k (Dados Reais)
+#### SIR - População 100k, Passos 50k
 
 | Threads | Tempo Médio | Desvio Padrão | vs Sequencial | Conclusão |
-|---------|-------------|---------------|---------------|-----------||
+|---------|-------------|---------------|---------------|-----------|
 | Sequencial | 3.9 ms | ±0.47 ms | - | Baseline |
 | 1 thread | 4.2 ms | ±0.79 ms | 1.08x mais lento | Overhead mínimo |
 | 2 threads | 5.9 ms | ±4.56 ms | 1.51x mais lento | Overhead cresce |
@@ -300,7 +306,7 @@ k4 = h · f(t + h, y + k3)      ← Precisa de k3!
 
 **Problema:** Overhead de threads domina em trabalhos pequenos
 
-**Análise de Granularidade (dados reais):**
+**Análise de Granularidade:**
 
 | Estratégia | Trabalho/Thread | Overhead | Razão | Speedup | Resultado |
 |-----------|----------------|----------|-------|---------|-----------|
@@ -397,14 +403,14 @@ Projeto Final/
 ## 6. Conclusões
 
 ### Objetivos Alcançados
-✅ Implementação completa: 2 modelos × 4 abordagens (8 classes principais)  
-✅ Análise profunda: **paralelização não é sempre benéfica**  
-✅ Solução eficiente: **cenários paralelos (até 7.63x speedup)**  
-✅ Framework completo: **script centralizado + build organizado**  
-✅ ~2.160 testes executados automaticamente (15 repetições cada)  
-✅ 15 gráficos interativos com análise detalhada  
-✅ Compreensão de granularidade e overhead  
-✅ Documentação extensa (5 arquivos README)  
+- Implementação completa: 2 modelos × 4 abordagens (8 classes principais)  
+- Análise profunda: **paralelização não é sempre benéfica**  
+- Solução eficiente: **cenários paralelos (até 7.63x speedup)**  
+- Framework completo: **script centralizado + build organizado**  
+- ~2.160 testes executados automaticamente (15 repetições cada)  
+- 15 gráficos interativos com análise detalhada  
+- Compreensão de granularidade e overhead  
+- Documentação extensa (5 arquivos README)  
 
 ### Principais Aprendizados
 
@@ -428,21 +434,6 @@ Projeto Final/
 - Pivotamos para cenários com sucesso
 - Resultado: speedup real de até 7.63x
 
-### Métricas Finais
-
-| Métrica                  | Valor       |
-|--------------------------|-------------|
-| Linhas de código         | ~5.000      |
-| Classes Java             | 16          |
-| Testes realizados        | ~2.160      |
-| Repetições por config    | 15          |
-| Gráficos gerados         | 15          |
-| Scripts Python           | 3           |
-| Documentação (README)    | 5 arquivos  |
-| Speedup (população 8t)   | 0.38x ❌     |
-| Speedup (cenários 500)   | 7.63x ✅     |
-| Eficiência máxima        | 95.4%       |
-| Lição aprendida          | **ESSENCIAL** |
 
 ### Por Que Apresentar Resultados Mistos?
 
@@ -472,50 +463,4 @@ Projeto Final/
 
 ---
 
-## Interpretação dos Gráficos
-
-### Gráfico de Threads: Por que múltiplas linhas?
-
-Os gráficos agora mostram **5 linhas separadas:**
-- 🔵 **Sequencial (baseline)**
-- 🔴 **1 thread:** ~1.08x mais lento (overhead mínimo)
-- 🟠 **2 threads:** ~1.51x mais lento (overhead visível)
-- 🟢 **4 threads:** ~2.90x mais lento (overhead alto)
-- 🟣 **8 threads:** ~2.62x mais lento (overhead dominante)
-
-**Por que linhas paralelas estão ACIMA da sequencial?**
-- **Eixo Y:** Tempo de execução (quanto MAIOR, PIOR)
-- **Linhas acima:** Mais lentas que baseline
-- **Conclusão:** Overhead supera ganho de paralelização
-
-**Quando paralelo seria melhor?**
-- Linhas deveriam estar ABAIXO da sequencial
-- Exemplo: cenários mostram linha paralela muito abaixo (75ms vs 257ms)
-
-### Parâmetros Epidemiológicos Padronizados
-
-**Todos os benchmarks usam os mesmos parâmetros:**
-
-**SIR:**
-- Taxa de transmissão (β): 0.2
-- Taxa de recuperação (γ): 0.1
-- Infectados iniciais (I₀): 10.0
-- Recuperados iniciais (R₀): 0.0
-
-**SIS:**
-- Taxa de transmissão (β): 0.3
-- Taxa de recuperação (γ): 0.1
-- Infectados iniciais (I₀): 1.0
-
-**Importância da padronização:**
-- Comparações justas entre estratégias (sequencial, paralelo, distribuído)
-- Reprodutibilidade científica
-- Isolamento de variáveis (desempenho vs parâmetros epidemiológicos)
-
-**Dados Estatísticos (15 repetições)**
-
-**Benefícios das múltiplas repetições:**
-- Média mais confiável (reduz impacto de outliers)
-- Desvio padrão representativo (mostra variabilidade real)
-- Intervalos de confiança mais estreitos
-- Barras de erro nos gráficos mostram estabilidade
+## Principais Gráficos
