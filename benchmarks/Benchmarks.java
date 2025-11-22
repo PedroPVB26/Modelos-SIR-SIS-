@@ -11,8 +11,8 @@ import java.util.Locale;
  */
 public class Benchmarks {
     
-    private static final int REPETICOES = 5; // Número de repetições por teste
-    private static final String ARQUIVO_CSV = "dados/resultados_benchmark.csv";
+    private static final int REPETICOES = 15; // Número de repetições por teste
+    private static final String ARQUIVO_CSV = "../dados/resultados_benchmark.csv";
     
     // Configurações de tamanho de problema para testar
     private static final double[] TAMANHOS_POPULACAO = {100000.0, 500000.0, 1000000.0, 2000000.0};
@@ -86,7 +86,8 @@ public class Benchmarks {
     }
     
     private static void testarSIRVariandoTamanho() {
-        int numeroThreads = Runtime.getRuntime().availableProcessors();
+        // Testa com diferentes números de threads
+        int[] numerosThreads = {1, 2, 4, 8};
         
         for (double populacao : TAMANHOS_POPULACAO) {
             for (int passos : TAMANHOS_PASSOS) {
@@ -106,17 +107,19 @@ public class Benchmarks {
                 }
                 System.out.println(" ✓");
                 
-                // SIR Paralelo
-                System.out.print("    • SIR Paralelo...");
-                for (int rep = 1; rep <= REPETICOES; rep++) {
-                    SIRParalelo sirPar = new SIRParalelo(
-                        populacao, TAXA_TRANSMISSAO_SIR, TAXA_RECUPERACAO_SIR,
-                        INFECTADOS_INICIAIS_SIR, RECUPERADOS_INICIAIS_SIR, tempoMaximo, passos
-                    );
-                    double tempo = sirPar.executarSimulacao();
-                    gravarResultado("SIR", "Paralelo", populacao, passos, 0, numeroThreads, rep, tempo);
+                // SIR Paralelo com diferentes números de threads
+                for (int numThreads : numerosThreads) {
+                    System.out.printf("    • SIR Paralelo (%d threads)...", numThreads);
+                    for (int rep = 1; rep <= REPETICOES; rep++) {
+                        SIRParalelo sirPar = new SIRParalelo(
+                            populacao, TAXA_TRANSMISSAO_SIR, TAXA_RECUPERACAO_SIR,
+                            INFECTADOS_INICIAIS_SIR, RECUPERADOS_INICIAIS_SIR, tempoMaximo, passos, numThreads
+                        );
+                        double tempo = sirPar.executarSimulacao();
+                        gravarResultado("SIR", "Paralelo", populacao, passos, 0, numThreads, rep, tempo);
+                    }
+                    System.out.println(" ✓");
                 }
-                System.out.println(" ✓");
             }
         }
     }
@@ -157,15 +160,16 @@ public class Benchmarks {
     }
     
     private static void testarSISVariandoTamanho() {
-        int numeroThreads = Runtime.getRuntime().availableProcessors();
+        // Testa com diferentes números de threads
+        int[] numerosThreads = {1, 2, 4, 8};
         
-        // Para SIS, usamos populações menores pois convergem mais rápido
-        double[] populacoesSIS = {1000.0, 5000.0, 10000.0, 50000.0};
-        int[] passosSIS = {101, 501, 1001};
+        // Para SIS, usamos as MESMAS populações do SIR para consistência
+        double[] populacoesSIS = TAMANHOS_POPULACAO; // 100k, 500k, 1M, 2M
+        int[] passosSIS = TAMANHOS_PASSOS; // 10k, 25k, 50k
         
         for (double populacao : populacoesSIS) {
             for (int passos : passosSIS) {
-                double tempoMaximo = passos - 1.0; // Mantém proporção
+                double tempoMaximo = passos / 100.0; // Mantém proporção
                 
                 System.out.printf("\n  Testando: População=%.0f, Passos=%d\n", populacao, passos);
                 
@@ -181,24 +185,26 @@ public class Benchmarks {
                 }
                 System.out.println(" ✓");
                 
-                // SIS Paralelo
-                System.out.print("    • SIS Paralelo...");
-                for (int rep = 1; rep <= REPETICOES; rep++) {
-                    SISParalelo sisPar = new SISParalelo(
-                        populacao, TAXA_TRANSMISSAO_SIS, TAXA_RECUPERACAO_SIS,
-                        INFECTADOS_INICIAIS_SIS, tempoMaximo, passos
-                    );
-                    double tempo = sisPar.executarSimulacao();
-                    gravarResultado("SIS", "Paralelo", populacao, passos, 0, numeroThreads, rep, tempo);
+                // SIS Paralelo com diferentes números de threads
+                for (int numThreads : numerosThreads) {
+                    System.out.printf("    • SIS Paralelo (%d threads)...", numThreads);
+                    for (int rep = 1; rep <= REPETICOES; rep++) {
+                        SISParalelo sisPar = new SISParalelo(
+                            populacao, TAXA_TRANSMISSAO_SIS, TAXA_RECUPERACAO_SIS,
+                            INFECTADOS_INICIAIS_SIS, tempoMaximo, passos, numThreads
+                        );
+                        double tempo = sisPar.executarSimulacao();
+                        gravarResultado("SIS", "Paralelo", populacao, passos, 0, numThreads, rep, tempo);
+                    }
+                    System.out.println(" ✓");
                 }
-                System.out.println(" ✓");
             }
         }
     }
     
     private static void testarSISCenariosVariandoTamanho() {
         int numeroThreads = Runtime.getRuntime().availableProcessors();
-        double populacao = 1000.0;
+        double populacao = 1000000.0; // Mesma população do SIR
         int passos = 50000;
         double tempoMaximo = 100.0;
         
