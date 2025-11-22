@@ -321,8 +321,8 @@ k4 = h · f(t + h, y + k3)      ← Precisa de k3!
 **Regra descoberta:** Trabalho útil deve ser > **20x** o overhead para ter ganho
 
 **Solução adotada:** 
-- ❌ Evitar: paralelização de população (razão 1:12)
-- ✅ Usar: cenários paralelos (razão 17:1 até 137:1)
+- ❌ Evitar: paralelização de população.
+- ✅ Usar: cenários paralelos.
 
 ---
 
@@ -358,27 +358,27 @@ Trabalho_útil_por_thread >> Overhead_paralelização
 
 ```
 Projeto Final/
-├── SIR/java/                    # Modelo SIR
-│   ├── SIRSequencial.java       # Implementação sequencial
-│   ├── SIRParalelo.java         # Paralelização por população
-│   ├── cenarios/                # Cenários paralelos (Monte Carlo)
-│   └── distribuido/             # Cliente/Servidor RMI
-├── SIS/java/                    # Modelo SIS (mesma estrutura)
-├── benchmarks/                  # Sistema de benchmarks
-│   ├── Benchmarks.java          # Variação população/passos/cenários
+├── SIR/java/                    
+│   ├── SIRSequencial.java       
+│   ├── SIRParalelo.java        
+│   ├── cenarios/                
+│   └── distribuido/             
+├── SIS/java/                    
+├── benchmarks/                  
+│   ├── Benchmarks.java          
 │   └── BenchmarksDistribuidoCompleto.java
-├── scripts_analise/             # Scripts Python
+├── scripts_analise/            
 │   ├── analisar_resultados_interativo.py
 │   ├── analisar_resultados_distribuido_completo.py
 │   └── gerar_index_unificado.py
-├── build/                       # Bytecode compilado (.gitignore)
-├── datos/                       # Resultados CSV
+├── build/                      
+├── datos/                       
 │   ├── resultados_benchmark.csv
 │   └── resultados_benchmark_distribuido_completo.csv
-├── graficos/                    # Visualizações HTML
-│   ├── index_graficos.html      # Página índice unificada
-│   └── grafico_*.html           # 15 gráficos interativos
-└── executar.ps1                 # Script de automação completo
+├── graficos/                    
+│   ├── index_graficos.html      
+│   └── grafico_*.html           
+└── executar.ps1                
 ```
 
 ### Tecnologias Utilizadas
@@ -413,7 +413,6 @@ Projeto Final/
 - Documentação extensa (5 arquivos README)  
 
 ### Principais Aprendizados
-
 **1. Nem toda computação deve ser paralelizada**
 - Overhead pode superar o ganho (população: 2.6x mais lento)
 - Cenários: trabalho 17-137x > overhead = sucesso
@@ -435,32 +434,12 @@ Projeto Final/
 - Resultado: speedup real de até 7.63x
 
 
-### Por Que Apresentar Resultados Mistos?
-
-**Valor educacional e científico:**
-
-1. **Honestidade científica:** 
-   - Mostrar resultados reais, incluindo estratégias que não funcionaram
-   - Dados com 15 repetições garantem confiabilidade estatística
-
-2. **Análise crítica profunda:** 
-   - Entender POR QUÊ uma estratégia falha é mais valioso que sucesso cego
-   - Trade-off entre overhead (2-7ms) vs trabalho (0.5-4ms) é lição essencial
-
-3. **Decisão de engenharia informada:** 
-   - Saber QUANDO paralelizar é tão importante quanto saber COMO
-   - Regra prática: razão trabalho/overhead > 20:1 para viabilidade
-
-4. **Solução alternativa viável:** 
-   - Cenários como estratégia superior (7.63x vs 0.38x)
-   - Eficiência até 95.4% com 500 cenários
-
-5. **Contribuição real:**
-   - Documentar armadilhas de paralelização
-   - Guia prático: quando evitar divisão de população
-
-**Mensagem:** Resultado negativo bem analisado contribui mais para conhecimento que resultado positivo não compreendido.
-
 ---
 
 ## Principais Gráficos
+
+
+## Contribuições Individuais
+- **Análise do problema e de possíveis soluções:** Todos;
+- **Codificação da Solução** *Leonardo Silva e Cruz* e *Pedro Paulo Valente Bittencourt*. Vale ressaltar que a parte de "perfumaria", geração de gráficos, salvamento de dados em .csv, execução automática via código powershell foi feita pelo *GitHub Copilot*, sendo que o mesmo foi responsável pela solução sequencial inicial;
+- **Documentação do Projeto e Análise dos Testes:** *Lucas Francisco Alves Costa* e *Isabella Pires da Silva*. Vale ressaltar que também houve auxílio do *GitHub Copilot*;

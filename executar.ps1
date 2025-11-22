@@ -77,7 +77,7 @@ Write-Host "      Concluido" -ForegroundColor Green
 # ===========================================================================
 # PASSO 3: EXECUTAR BENCHMARKS
 # ===========================================================================
-Write-Host "[3/5] Executando benchmarks..." -ForegroundColor Yellow
+Write-Host "[3/7] Executando benchmarks..." -ForegroundColor Yellow
 
 cd "$ROOT\benchmarks"
 java -cp "$BUILD_DIR;..\SIR\java;..\SIS\java" Benchmarks
@@ -92,32 +92,45 @@ Write-Host "      Concluido" -ForegroundColor Green
 # ===========================================================================
 # PASSO 4: GERAR GRAFICOS
 # ===========================================================================
-Write-Host "[4/5] Gerando graficos interativos..." -ForegroundColor Yellow
+Write-Host "[4/6] Gerando graficos interativos..." -ForegroundColor Yellow
 
 cd "$ROOT\scripts_analise"
 
 if (Test-Path "$ROOT\dados\resultados_benchmark_completo.csv") {
     python analisar_resultados_interativo.py
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "      Concluido" -ForegroundColor Green
+        Write-Host "      Graficos principais gerados" -ForegroundColor Green
     } else {
-        Write-Host "      ERRO ao gerar graficos" -ForegroundColor Red
+        Write-Host "      ERRO ao gerar graficos principais" -ForegroundColor Red
     }
 } elseif (Test-Path "$ROOT\dados\resultados_benchmark.csv") {
     python analisar_resultados_interativo.py
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "      Concluido" -ForegroundColor Green
+        Write-Host "      Graficos principais gerados" -ForegroundColor Green
     } else {
-        Write-Host "      ERRO ao gerar graficos" -ForegroundColor Red
+        Write-Host "      ERRO ao gerar graficos principais" -ForegroundColor Red
     }
 } else {
     Write-Host "      ERRO: Arquivo CSV nao foi gerado!" -ForegroundColor Red
 }
 
+# Gerar graficos distribuidos se o CSV existir
+if (Test-Path "$ROOT\dados\resultados_benchmark_distribuido_completo.csv") {
+    Write-Host "      Gerando graficos distribuidos..." -ForegroundColor Gray
+    python analisar_resultados_distribuido_completo.py
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "      Graficos distribuidos gerados" -ForegroundColor Green
+    } else {
+        Write-Host "      AVISO: Erro ao gerar graficos distribuidos" -ForegroundColor Yellow
+    }
+}
+
+Write-Host "      Concluido" -ForegroundColor Green
+
 # ===========================================================================
 # PASSO 5: GERAR INDEX
 # ===========================================================================
-Write-Host "[5/5] Gerando pagina de visualizacao..." -ForegroundColor Yellow
+Write-Host "[5/6] Gerando pagina de visualizacao..." -ForegroundColor Yellow
 
 cd "$ROOT\scripts_analise"
 python gerar_index_unificado.py
@@ -137,7 +150,8 @@ Write-Host "  PROCESSO CONCLUIDO!"  -ForegroundColor Green
 Write-Host "========================================"  -ForegroundColor Green
 Write-Host ""
 Write-Host "Arquivos gerados:" -ForegroundColor White
-Write-Host "  Dados: dados\resultados_benchmark_completo.csv" -ForegroundColor Gray
-Write-Host "  Graficos: graficos\*.html" -ForegroundColor Gray
+Write-Host "  Dados: dados\resultados_benchmark.csv" -ForegroundColor Gray
+Write-Host "  Dados distribuidos: dados\resultados_benchmark_distribuido_completo.csv" -ForegroundColor Gray
+Write-Host "  Graficos: graficos\*.html (16 arquivos)" -ForegroundColor Gray
 Write-Host "  Visualizacao: graficos\index_graficos.html" -ForegroundColor Gray
 Write-Host ""
