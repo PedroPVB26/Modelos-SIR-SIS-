@@ -122,23 +122,23 @@ dI/dt = β·S·I/N - γ·I
 
 | Threads | Tempo Médio | Desvio Padrão | vs Sequencial | Conclusão |
 |---------|-------------|---------------|---------------|-----------|
-| Sequencial | 3.9 ms | ±0.47 ms | - | Baseline |
-| 1 thread | 4.2 ms | ±0.79 ms | 1.08x mais lento | Overhead mínimo |
-| 2 threads | 5.9 ms | ±4.56 ms | 1.51x mais lento | Overhead cresce |
-| 4 threads | 11.3 ms | ±9.08 ms | 2.90x mais lento | Overhead alto |
-| 8 threads | 10.2 ms | ±4.37 ms | 2.62x mais lento | Overhead alto |
+| Sequencial | 5.5 ms | ±1.7 ms | - | Baseline |
+| 1 thread | 4.3 ms | ±0.8 ms | 0.78x mais rápido | Overhead mínimo |
+| 2 threads | 4.9 ms | ±1.1 ms | 0.89x mais lento | Overhead cresce |
+| 4 threads | 5.7 ms | ±0.8 ms | 1.04x mais lento | Overhead alto |
+| 8 threads | 9.8 ms | ±2.0 ms | 1.78x mais lento | Overhead alto |
 
 **📊 ANÁLISE:**
-- Sequencial: ~4ms de trabalho útil (±0.47ms - muito estável)
-- Paralelo 8 threads: ~10ms (2.6x MAIS LENTO, ±4.37ms)
-- **Overhead de paralelização: ~6ms** (criação threads + sincronização)
-- **Grão muito fino:** trabalho por thread (~0.5ms) << overhead (~6ms)
-- **Desvio padrão cresce com threads:** sequencial ±0.5ms → 8 threads ±4.4ms (instabilidade)
+- Sequencial: ~5.5ms de trabalho útil (±1.7ms - razoavelmente estável)
+- Paralelo 8 threads: ~9.8ms (1.8x MAIS LENTO, ±2.0ms)
+- **Overhead de paralelização: ~4.3ms** (criação threads + sincronização)
+- **Grão muito fino:** trabalho por thread (~0.7ms) << overhead (~4.3ms)
+- **Desvio padrão:** sequencial ±1.7ms vs 8 threads ±2.0ms (relativamente estável)
 
 **Por que não há ganho?**
-- Trabalho por thread: 3.9ms ÷ 8 = **0.49ms**
-- Overhead de sincronização: **~6ms**
-- Overhead é **12x maior** que trabalho útil por thread
+- Trabalho por thread: 5.5ms ÷ 8 = **0.69ms**
+- Overhead de sincronização: **~4.3ms**
+- Overhead é **6.2x maior** que trabalho útil por thread
 
 ---
 
@@ -148,23 +148,36 @@ dI/dt = β·S·I/N - γ·I
 
 | Cenários | Sequencial | Paralelo (8 threads) | Speedup | Eficiência | Status |
 |----------|------------|----------------------|---------|------------|--------|
-| 100      | 257.2 ms   | 75.3 ms              | 3.42x   | 42.7%      | ✅ Bom |
-| 500      | 1310.7 ms  | 171.8 ms             | 7.63x   | 95.4%      | ✅ Excelente |
-| 1000     | 2056.3 ms  | 331.0 ms             | 6.21x   | 77.6%      | ✅ Muito Bom |
+|  100     |    206.0 ms   |     61.8 ms             |  3.33x   |  41.7%      | ✅ Bom |
+|  500     |   1018.2 ms   |    184.2 ms             |  5.53x   |  69.1%      | ✅ Bom |
+| 1000     |   2039.6 ms   |    362.5 ms             |  5.63x   |  70.3%      | ✅ Muito Bom |
 
 **🟢 ANÁLISE:**
-- Speedup consistente entre 3.4x e 7.6x
-- Eficiência > 75% para 500+ cenários
-- Overhead diluído em trabalho substancial (257-2056ms)
+- Speedup consistente entre 3.3x e 5.6x
+- Eficiência máxima de 70.3% para 1000 cenários
+- Overhead diluído em trabalho substancial (206-2040ms)
 - **Grão grosso:** cada cenário é independente e completo
 
 #### SIS - Múltiplos Cenários (População 1M, 50k passos)
 
 | Cenários | Sequencial | Paralelo (8 threads) | Speedup | Eficiência |
 |----------|------------|----------------------|---------|------------|
-| 100      | 216.4 ms   | 51.3 ms              | 4.22x   | 52.7%      |
-| 500      | 1176.4 ms  | 168.2 ms             | 6.99x   | 87.4%      |
-| 1000     | 2139.0 ms  | 318.9 ms             | 6.71x   | 83.9%      |
+|  100     |    212.0 ms   |     47.0 ms              |  4.51x   |  56.4%      |
+|  500     |   1048.9 ms   |    161.0 ms              |  6.51x   |  81.4%      |
+| 1000     |   2134.3 ms   |    326.8 ms              |  6.53x   |  81.6%      |
+
+#### Benchmarks Distribuídos (RMI)
+
+| Modelo | Hosts | Tempo Médio | Desvio Padrão | Speedup | Eficiência |
+|--------|-------|-------------|---------------|---------|------------|
+| SIR | 1 |   1142.9 ms | ±785.8 ms |  1.00x | 100.0% |
+| SIR | 2 |    598.2 ms | ±419.2 ms |  1.91x |  95.5% |
+| SIR | 4 |    309.0 ms | ±216.8 ms |  3.70x |  92.5% |
+| SIR | 8 |    197.4 ms | ±142.7 ms |  5.79x |  72.4% |
+| SIS | 1 |   1177.2 ms | ±797.8 ms |  1.00x | 100.0% |
+| SIS | 2 |    611.3 ms | ±420.0 ms |  1.93x |  96.3% |
+| SIS | 4 |    326.2 ms | ±227.1 ms |  3.61x |  90.2% |
+| SIS | 8 |    182.2 ms | ±121.7 ms |  6.46x |  80.8% |
 
 **Resultado:** Ambos modelos (SIR e SIS) têm excelente speedup em cenários!
 
@@ -215,21 +228,21 @@ dI/dt = β·S·I/N - γ·I
 
 | Estratégia             | Trabalho/Thread | Overhead | Speedup | Eficiência | Resultado |
 |------------------------|----------------|----------|---------|------------|-----------|
-| 1 Thread (População)   | ~4 ms          | ~0.2 ms  | 1.08x ↓ | -8%        | 🟡 Neutro |
-| 2 Threads (População)  | ~2 ms          | ~2 ms    | 1.51x ↓ | -25%       | 🟠 Ruim   |
-| 4 Threads (População)  | ~1 ms          | ~7 ms    | 2.90x ↓ | -48%       | 🔴 Péssimo|
-| 8 Threads (População)  | ~0.5 ms        | ~6 ms    | 2.62x ↓ | -20%       | 🔴 Péssimo|
-| **Cenários (100)**     | **257 ms**     | **~15 ms** | **3.42x ↑** | **43%** | ✅ **Bom** |
-| **Cenários (500)**     | **1311 ms**    | **~15 ms** | **7.63x ↑** | **95%** | ✅ **Ótimo** |
-| **Cenários (1000)**    | **2056 ms**    | **~15 ms** | **6.21x ↑** | **78%** | ✅ **Muito Bom** |
+| 1 Thread (População)   | ~5.5 ms        | ~0.2 ms  | 0.78x ↑ | +22%       | 🟢 Ganho |
+| 2 Threads (População)  | ~2.8 ms        | ~2.1 ms  | 0.89x ↓ | -11%       | 🟠 Ruim   |
+| 4 Threads (População)  | ~1.4 ms        | ~4.3 ms  | 1.04x ↓ | -4%        | 🟡 Neutro|
+| 8 Threads (População)  | ~0.7 ms        | ~4.3 ms  | 1.78x ↓ | -78%       | 🔴 Ruim|
+| **Cenários (100)**     | **206 ms**     | **~10 ms** | **3.33x ↑** | **42%** | ✅ **Bom** |
+| **Cenários (500)**     | **1018 ms**    | **~20 ms** | **5.53x ↑** | **69%** | ✅ **Bom** |
+| **Cenários (1000)**    | **2040 ms**    | **~40 ms** | **5.63x ↑** | **70%** | ✅ **Muito Bom** |
 | **Distribuído RMI (100)** | **253 ms** | **~50 ms** | **3.76x ↑** | **47%** | ✅ **Bom** |
 | **Distribuído RMI (500)** | **1318 ms** | **~80 ms** | **4.84x ↑** | **61%** | ✅ **Bom** |
 | **Distribuído RMI (1000)** | **2416 ms** | **~100 ms** | **5.37x ↑** | **67%** | ✅ **Muito Bom** |
 
 **Diferença de Desempenho:**
-- População (8 threads): **2.62x MAIS LENTO** (perda de 162%)
-- Cenários (500): **7.63x MAIS RÁPIDO** (ganho de 663%)
-- **Gap entre estratégias: ~1000% de diferença!**
+- População (8 threads): **1.78x MAIS LENTO** (perda de 78%)
+- Cenários (500): **5.53x MAIS RÁPIDO** (ganho de 453%)
+- **Gap entre estratégias: ~631% de diferença!**
 
 ---
 
@@ -255,21 +268,21 @@ for (int t = 0; t < numeroThreads; t++) {
 **Análise de Custos (100k população, 50k passos):**
 ```
 SEQUENCIAL:
-  Trabalho útil total: 3.9 ms
+  Trabalho útil total: 5.5 ms
 
 PARALELO (8 THREADS):
   Criação de threads:        ~2.0 ms
-  Sincronização/agregação:   ~4.0 ms
-  Trabalho útil (8 threads): ~4.0 ms (não paraleliza bem!)
+  Sincronização/agregação:   ~2.3 ms
+  Trabalho útil (8 threads): ~5.5 ms (não paraleliza bem!)
   ────────────────────────────────
-  Total paralelo:           ~10.0 ms
+  Total paralelo:           ~9.8 ms
   
-RESULTADO: 2.6x MAIS LENTO!
+RESULTADO: 1.78x MAIS LENTO!
 ```
 
 **Por que trabalho não paraleliza?**
-- Problema muito pequeno: 3.9ms total
-- Dividir em 8 partes: 0.49ms por thread
+- Problema muito pequeno: 5.5ms total
+- Dividir em 8 partes: 0.69ms por thread
 - **Tempo mínimo de escalonamento Java: ~0.5-1ms**
 - Threads passam mais tempo esperando CPU do que computando!
 
@@ -310,13 +323,13 @@ k4 = h · f(t + h, y + k3)      ← Precisa de k3!
 
 | Estratégia | Trabalho/Thread | Overhead | Razão | Speedup | Resultado |
 |-----------|----------------|----------|-------|---------|-----------|
-| 1 thread (pop.) | 3.9 ms | ~0.2 ms | 20:1 | 1.08x ↓ | 🟡 Limiar |
-| 2 threads (pop.) | 2.0 ms | ~2.0 ms | 1:1 | 1.51x ↓ | 🟠 Ruim |
-| 4 threads (pop.) | 1.0 ms | ~7.0 ms | 1:7 | 2.90x ↓ | 🔴 Péssimo |
-| 8 threads (pop.) | 0.5 ms | ~6.0 ms | 1:12 | 2.62x ↓ | 🔴 Péssimo |
-| **100 cenários** | **257 ms** | **~15 ms** | **17:1** | **3.42x ↑** | ✅ **Bom** |
-| **500 cenários** | **1311 ms** | **~15 ms** | **87:1** | **7.63x ↑** | ✅ **Ótimo** |
-| **1000 cenários** | **2056 ms** | **~15 ms** | **137:1** | **6.21x ↑** | ✅ **Muito Bom** |
+| 1 thread (pop.) | 5.5 ms | ~0.2 ms | 28:1 | 0.78x ↑ | 🟢 Ganho |
+| 2 threads (pop.) | 2.8 ms | ~2.1 ms | 1.3:1 | 0.89x ↓ | 🟠 Ruim |
+| 4 threads (pop.) | 1.4 ms | ~4.3 ms | 1:3 | 1.04x ↓ | 🟡 Neutro |
+| 8 threads (pop.) | 0.7 ms | ~4.3 ms | 1:6 | 1.78x ↓ | 🔴 Ruim |
+| **100 cenários** | **206 ms** | **~10 ms** | **21:1** | **3.33x ↑** | ✅ **Bom** |
+| **500 cenários** | **1018 ms** | **~20 ms** | **51:1** | **5.53x ↑** | ✅ **Bom** |
+| **1000 cenários** | **2040 ms** | **~40 ms** | **51:1** | **5.63x ↑** | ✅ **Muito Bom** |
 
 **Regra descoberta:** Trabalho útil deve ser > **20x** o overhead para ter ganho
 
@@ -330,11 +343,11 @@ k4 = h · f(t + h, y + k3)      ← Precisa de k3!
 
 | Aspecto | Grão-Fino (População) | Grão-Grosso (Cenários) |
 |---------|----------------------|------------------------|
-| Trabalho/Thread | 0.5-4 ms | 257-2056 ms |
-| Overhead | 2-7 ms | ~15 ms |
-| Razão | Overhead 1.75-14x > trabalho | Trabalho 17-137x > overhead |
-| Speedup | 1.08-2.90x ↓ (PERDA!) | 3.42-7.63x ↑ (GANHO!) |
-| Eficiência | -8% a -48% | 43-95% |
+| Trabalho/Thread | 0.7-5.5 ms | 206-2040 ms |
+| Overhead | 0.2-4.3 ms | ~10-40 ms |
+| Razão | Overhead 0.04-6x vs trabalho | Trabalho 21-51x > overhead |
+| Speedup | 0.78x ↑ a 1.78x ↓ (VARIÁVEL!) | 3.33-5.63x ↑ (GANHO!) |
+| Eficiência | +22% a -78% | 42-70% |
 | Desvio Padrão | Alto (±4-15ms) | Baixo (±2-5ms) |
 | **Conclusão** | ❌ NÃO VALE A PENA | ✅ EXCELENTE |
 
@@ -342,8 +355,8 @@ k4 = h · f(t + h, y + k3)      ← Precisa de k3!
 ```
 Trabalho_útil_por_thread >> Overhead_paralelização
 
-✅ Cenários (500): 1311ms / 8 threads = 164ms >> 15ms overhead (razão 11:1)
-❌ População (8t): 3.9ms / 8 threads = 0.5ms << 6ms overhead (razão 1:12)
+✅ Cenários (500): 1018ms / 8 threads = 127ms >> 20ms overhead (razão 6:1)
+❌ População (8t): 5.5ms / 8 threads = 0.69ms << 4.3ms overhead (razão 1:6)
 ```
 
 **Lei de Amdahl aplicada:**
@@ -352,60 +365,14 @@ Trabalho_útil_por_thread >> Overhead_paralelização
 
 ---
 
-## 5. Arquitetura do Projeto
-
-### Estrutura de Diretórios
-
-```
-Projeto Final/
-├── SIR/java/                    
-│   ├── SIRSequencial.java       
-│   ├── SIRParalelo.java        
-│   ├── cenarios/                
-│   └── distribuido/             
-├── SIS/java/                    
-├── benchmarks/                  
-│   ├── Benchmarks.java          
-│   └── BenchmarksDistribuidoCompleto.java
-├── scripts_analise/            
-│   ├── analisar_resultados_interativo.py
-│   ├── analisar_resultados_distribuido_completo.py
-│   └── gerar_index_unificado.py
-├── build/                      
-├── datos/                       
-│   ├── resultados_benchmark.csv
-│   └── resultados_benchmark_distribuido_completo.csv
-├── graficos/                    
-│   ├── index_graficos.html      
-│   └── grafico_*.html           
-└── executar.ps1                
-```
-
-### Tecnologias Utilizadas
-
-**Java 8+:**
-- `ExecutorService` + `CountDownLatch` (paralelização)
-- `java.rmi.*` (computação distribuída)
-- Streams para processamento de dados
-
-**Python 3.x:**
-- `pandas`: Análise de dados
-- `plotly`: Gráficos interativos HTML
-- Scripts automatizados de geração
-
-**PowerShell 5.1:**
-- Automação de compilação
-- Execução sequencial de todas as etapas
-- Abertura automática de resultados
-
----
+## 5. Principais Gráficos
 
 ## 6. Conclusões
 
 ### Objetivos Alcançados
 - Implementação completa: 2 modelos × 4 abordagens (8 classes principais)  
 - Análise profunda: **paralelização não é sempre benéfica**  
-- Solução eficiente: **cenários paralelos (até 7.63x speedup)**  
+- Solução eficiente: **cenários paralelos (até 6.5x speedup)**  
 - Framework completo: **script centralizado + build organizado**  
 - ~2.160 testes executados automaticamente (15 repetições cada)  
 - 15 gráficos interativos com análise detalhada  
@@ -431,13 +398,9 @@ Projeto Final/
 **4. Flexibilidade na solução é essencial**
 - Estratégia inicial (população) não escalou
 - Pivotamos para cenários com sucesso
-- Resultado: speedup real de até 7.63x
-
+- Resultado: speedup real de até 6.5x
 
 ---
-
-## Principais Gráficos
-
 
 ## Contribuições Individuais
 - **Análise do problema e de possíveis soluções:** Todos;
