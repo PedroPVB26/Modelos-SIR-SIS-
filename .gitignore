@@ -42,6 +42,5 @@ env/
 Thumbs.db
 desktop.ini
 
-# Resultados antigos (opcional - descomente se quiser versionar apenas os finais)
-# dados/*.csv
-# graficos/*.html
+# Documentação gerada automaticamente
+APRESENTACAO_PDF.md

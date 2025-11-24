@@ -3,10 +3,6 @@ package cenarios;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
-/**
- * Versão Paralela SIMPLIFICADA: Divide 100 simulações entre T threads (Paralelismo de Cenários).
- * Reutiliza o solver RK4 simplificado (sem funçöes de vetor) de forma independente em cada thread.
- */
 public class CenariosParaleloSIR {
     
     // Parâmetros da simulação

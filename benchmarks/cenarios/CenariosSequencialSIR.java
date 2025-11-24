@@ -2,10 +2,7 @@ package cenarios;
 
 import java.util.ArrayList;
 
-/**
- * Versão Sequencial SIMPLIFICADA: Executa 100 simulações completas em série.
- * Funções auxiliares de vetor foram removidas.
- */
+
 public class CenariosSequencialSIR {
 
     // Parâmetros da simulação

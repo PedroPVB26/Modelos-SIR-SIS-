@@ -2,12 +2,7 @@ package cenarios;
 
 import java.util.ArrayList;
 
-/**
- * Versão Sequencial de Cenários do Modelo SIS. Executa múltiplas simulações SIS
- * completas (variando o parâmetro taxaTransmissao) em série. * Para compilar e
- * rodar: 1. javac cenarios/CenariosSequencialSIS.java 2. java
- * cenarios.CenariosSequencialSIS
- */
+
 public class CenariosSequencialSIS {
 
     // Parâmetros da simulação

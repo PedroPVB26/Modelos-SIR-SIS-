@@ -3,12 +3,6 @@ package cenarios;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
-/**
- * Versão Paralela de Cenários do Modelo SIS. Divide múltiplas simulações SIS
- * completas entre os núcleos disponíveis (Paralelismo de Grão Grosso). * Para
- * compilar e rodar: 1. javac cenarios/CenariosParaleloSIS.java 2. java
- * cenarios.CenariosParaleloSIS
- */
 public class CenariosParaleloSIS {
 
     // Parâmetros da simulação
